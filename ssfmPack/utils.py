@@ -52,14 +52,14 @@ def plotCompare(T, Z, pulse, truthPulse, error, nrange = -1, title = None):
     vmin = np.min(truthPulse)
     vmax = np.max(truthPulse)
     #Ground Truth 
-    c1 = axes[0].contourf(T,Z,truthPulse, levels = 100, cmap = 'viridis') 
+    c1 = axes[0].contourf(T,Z,truthPulse, levels = 100, cmap = 'afmhot', vmin = vmin, vmax = vmax) 
     axes[0].set_title('SSFM') 
     axes[0].set_xlabel('T') 
     axes[0].set_ylabel('Z')
     fig.colorbar(c1, ax = axes[0])
     
     #Prediction 
-    c2 = axes[1].contourf(T,Z,pulse, levels = 100, cmap = 'viridis')
+    c2 = axes[1].contourf(T,Z,pulse, levels = 100, cmap = 'afmhot', vmin = vmin, vmax = vmax)
     axes[1].set_title('PINN') 
     axes[1].set_xlabel('T') 
     axes[1].set_ylabel('Z')
