@@ -3,15 +3,21 @@ import numpy as np
 from tqdm import trange
 import torch
 import torch.nn.functional as F
+from torch.optim.lr_scheduler import LambdaLR
+from imblearn.over_sampling import SMOTE
 
 class phyModel():
     def __init__(self, tx_init, uv_init, tx_col, tx_exp, uv_exp, txU_bound, txL_bound,
                  layers, parameters, optimizer, net = 'DNN',
-                 act = 'tanh', encode_dim = None, causal_decay = False, curriculum = None, progressive = None,
-                 epsilon_weight = 1e-3,  lambda_bound = 1, lambda_init = 1, lambda_r = 1):
+                 act = 'tanh', encode_dim = None, causal_decay = None, curriculum = None, progressive = None, smote = None,
+                 epsilon_weight = 1e-3,  lambda_bound = 1, lambda_init = 1, lambda_r = 1, scheduler = False,):
         
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         
+        #log
+        self.thisLog = pinnUtils.DictLogger()
+        self.metrics = {'loss': 0,
+                       'mse': float('inf')}
         #Model
         self.net = net
         self.layers = layers 
@@ -56,23 +62,26 @@ class phyModel():
         self.encode_dim = encode_dim
             #progressive 
         self.progressive = progressive
+        self.smote_threshold = 0
+        if smote is not None:
+            for k, v in smote.items():
+                setattr(self, k, v) #smote_threshold, smote_num, smote_epoch
+            self.SMOTE = SMOTE() #need improvement
+            self.thisLog.add({"sample number": len(self.t_col)})
         for k,v in parameters.items():
             setattr(self, k, v)
         
+        #Optimizers and Schedulers
         self.optimizer = pinnUtils.choose_optimizer(optimizer, self.dnn.parameters())
         self.iter = 0 
+        self.scheduler = None
+        if scheduler:
+            self.scheduler = LambdaLR(self.optimizer, lr_lambda=lambda epoch: 0.9 ** (self.iter // 5000))
         self.curr_on = None
-        self.bar = None
-        
+
         if self.causal_decay is not None:
-            self.X_occurs = torch.stack([x == self.x_col.unique() for x in self.x_col]).float().to(self.device).T
-            self.M = torch.triu(torch.ones((self.X_occurs.shape[0], self.X_occurs.shape[0])), diagonal=1).to(self.device).T
+            self.update_causal()
             self.epsilon_weight = epsilon_weight
-        
-        #log
-        self.thisLog = pinnUtils.DictLogger()
-        self.metrics = {'loss': 0,
-                       'mse': float('inf')}
 
     def predict(self, t,x):
         return self.dnn((t,x)) 
@@ -117,7 +126,7 @@ class phyModel():
                 )
 
         residue = torch.cat([residue_u, residue_v], dim = 1)
-        return residue
+        return torch.sum(torch.square(residue), dim =1).view(-1, 1)
     
     def boundary_loss(self,tL,xL, tU, xU):
         uvL = self.predict(tL, xL)
@@ -131,7 +140,7 @@ class phyModel():
 
     def causal_loss(self,t,x):
         uv_r = self.residual_loss(self.t_col, self.x_col)
-        L_t = (self.X_occurs @ uv_r.pow(2))/self.X_occurs.sum(1).reshape(-1,1)
+        L_t = (self.X_occurs @ uv_r)/self.X_occurs.sum(1).reshape(-1,1)
         W = torch.exp(-self.epsilon_weight*(self.M @ L_t)).detach()
         return W, L_t
 
@@ -144,7 +153,7 @@ class phyModel():
 
         if not self.causal_decay:
             uv_r = self.residual_loss(self.t_col, self.x_col)
-            residue = torch.sum(torch.square(uv_r), dim =1).mean()
+            residue = uv_r.mean()
         else:
             W, L_t = self.causal_loss(self.t_col, self.x_col)
             self.thisLog.add({'causal_minweight': W.min().item()})
@@ -176,6 +185,8 @@ class phyModel():
         self.dnn.train()
 
         if self.curriculum is not None:
+            if self.smote_threshold != 0:
+                print('Current Curriculum Learning Does Not Support SMOTE Resampling. Proceed into training.')
             self.curriculum_learning(self.curriculum)
 
             for curr_val in self.curr_range:
@@ -190,10 +201,14 @@ class phyModel():
                     self.optimizer.step(self.loss_func)
                     if  self.iter % min(self.epochs//10, 100) == 0:
                         self.validate(self.t_exp, self.x_exp, self.uv_exp)
-        
+
+                    if self.scheduler is not None:
+                        self.scheduler.step()
+                        
         elif self.progressive is not None:
+            if self.smote_threshold != 0:
+                print('Current Progressive Learning Does Not Support SMOTE Resampling. Proceed into training.')
             self.progressive_learning(self.progressive)
-            self.causal_decay = False #this version don't support causal_decay
             X_COL = self.x_col.detach().clone()
             T_COL = self.t_col.detach().clone()
             maxL = torch.max(X_COL).cpu().numpy(); minL = torch.min(X_COL).cpu().numpy()
@@ -216,6 +231,9 @@ class phyModel():
                     self.optimizer.step(self.loss_func)
                     if  self.iter % min(self.epochs//10, 100) == 0:
                         self.validate(self.t_exp, self.x_exp, self.uv_exp)
+                    
+                    if self.scheduler is not None:
+                        self.scheduler.step()
                 
                 if not index == self.prog_range[-1]:
                     rand_idx = torch.randint(0, self.x_col.shape[0], (self.prog_sampling,), device=self.x_col.device)
@@ -237,6 +255,13 @@ class phyModel():
 
                 if self.iter % 100 == 0:
                     mse = self.validate(self.t_exp, self.x_exp, self.uv_exp)
+                if self.scheduler is not None:
+                    self.scheduler.step()
+                
+                if len(self.t_col) > self.smote_max:
+                    self.smote_threshold = 0
+                if self.smote_threshold !=0 and self.iter%self.smote_epoch == 0:
+                    self.smote_resampling(self.t_col, self.x_col)
         return 
     
     def curriculum_learning(self, curriculum):
@@ -277,7 +302,43 @@ class phyModel():
         x_col = tx_col[:,1].reshape(-1,1)
         self.t_col = torch.tensor(t_col, requires_grad = True).float().to(self.device); 
         self.x_col = torch.tensor(x_col, requires_grad = True).float().to(self.device);
-                                                            
+        if self.causal_decay is not None:
+            self.update_causal()
+
+    def smote_resampling(self, t,x):
+        tx = torch.cat([t, x], dim = 1)
+        if self.causal_decay is not None:
+            W, L_t = self.causal_loss(t, x)
+            residue = (W*L_t).flatten()
+        else:
+            residue = (self.residual_loss(t, x)).flatten()
+            
+        k = int(self.smote_threshold * len(residue))
+        __, indices = torch.topk(residue, k=k)
+        not_indices = torch.tensor(list(set(range(len(residue)))-set(indices.tolist())), device = indices.device)
+        tx1 =tx[indices].detach().cpu().numpy()
+        tx0 =tx[not_indices].detach().cpu().numpy()
+    
+        TX = np.vstack([tx1, tx0])
+        Y = np.hstack([np.ones(len(tx1)), np.zeros(len(tx0))])
+        TX_resampled, y_resampled = self.SMOTE.fit_resample(TX, Y)
+        
+
+        self.t_col = torch.tensor(TX_resampled[:,0].reshape(-1,1), requires_grad = True).float().to(self.device)
+        self.x_col = torch.tensor(TX_resampled[:,1].reshape(-1,1), requires_grad = True).float().to(self.device)
+        self.optimizer.zero_grad()
+        self.thisLog.add({
+        "sample number": len(self.t_col),
+        })
+        if self.causal_decay is not None:
+            self.update_causal()
+    
+    def update_causal(self):
+        self.x_unique, unique_indices = torch.unique(self.x_col, return_inverse = True) 
+        self.t_unique = self.t_col[:,0][unique_indices]            
+        self.X_occurs = torch.stack([x == self.x_unique for x in self.x_col]).float().to(self.device).T
+        self.M = torch.triu(torch.ones((self.X_occurs.shape[0], self.X_occurs.shape[0])), diagonal=1).to(self.device).T
+            
         
     def validate(self, t,x, uv):
         self.dnn.eval()
