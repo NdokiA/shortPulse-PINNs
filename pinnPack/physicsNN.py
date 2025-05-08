@@ -66,8 +66,8 @@ class phyModel():
         if smote is not None:
             for k, v in smote.items():
                 setattr(self, k, v) #smote_threshold, smote_num, smote_epoch
-            self.SMOTE = SMOTE() #need improvement
             self.thisLog.add({"sample number": len(self.t_col)})
+            self.SMOTE = SMOTE(sampling_strategy = self.smote_ratio) #need improvement
         for k,v in parameters.items():
             setattr(self, k, v)
         
@@ -258,10 +258,10 @@ class phyModel():
                 if self.scheduler is not None:
                     self.scheduler.step()
                 
-                if len(self.t_col) > self.smote_max:
-                    self.smote_threshold = 0
                 if self.smote_threshold !=0 and self.iter%self.smote_epoch == 0:
                     self.smote_resampling(self.t_col, self.x_col)
+                    if len(self.t_col) > self.smote_max:
+                        self.smote_threshold = 0
         return 
     
     def curriculum_learning(self, curriculum):

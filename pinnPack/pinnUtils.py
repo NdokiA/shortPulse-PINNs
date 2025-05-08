@@ -70,25 +70,25 @@ class DictLogger:
             json.dump(history, f, indent = 4)
 
 #Sampling 
-def sobol_sampling(n: int, d: int, seed: int = 0) -> np.ndarray:
-    """
-    Sobol Sampling using torch.quasirandom
+def lhs_sampling(n: int, d: int, seed: int = 0) -> np.ndarray:
+        """
+        Latin Hypercube Sampling (LHS) to generate random points
 
-    Args:
-        n (int): Number of samples
-        d (int): Dimensions
-        seed (int, optional): Seed for reproducibility
+        Args:
+            n (int): Number of samples
+            d (int): Dimension of samples
+            seed (int, optional): Random seed. Defaults to None
 
-    Returns:
-        np.ndarray: Sobol samples scaled to [0, 1]^d
-    """
-    scramble = True if seed is None else False
-    if seed is not None:
-        torch.manual_seed(seed)
-
-    sobol = torch.quasirandom.SobolEngine(dimension=d, scramble = scramble)
-    samples = sobol.draw(n)  
-    return samples.numpy()
+        Returns:
+            np.ndarray: Random samples
+        """        
+        rng = np.random.default_rng(seed)
+        result = np.zeros((n,d))
+        
+        for i in range(d):
+            result[:,i] = rng.permutation(np.linspace(0,1,n,endpoint=False)) + rng.random((n))/n
+        
+        return result
 
 
 def generate_points(start: np.ndarray, final: np.ndarray, n: int, seed: int = 0) -> np.ndarray:
@@ -102,7 +102,7 @@ def generate_points(start: np.ndarray, final: np.ndarray, n: int, seed: int = 0)
         seed (int, optional): Random seed. Defaults to None.
     '''
     d = final.shape[-1] if isinstance(final, np.ndarray) else 1
-    points = sobol_sampling(n,d,seed)*(final-start) + start
+    points = lhs_sampling(n,d,seed)*(final-start) + start
     return points
 
 def ssfm_sampling(timeArray, lengthArray, pulse, num_sample = 2000, clipRange = 500, normalized = True):
@@ -110,7 +110,6 @@ def ssfm_sampling(timeArray, lengthArray, pulse, num_sample = 2000, clipRange = 
     pulse = utils.clipMatrix(pulse, clipRange)
     T,L = np.meshgrid(clipTime, lengthArray) 
 
-    # Sample Sobol points in 2D
     samples =generate_points(np.array([0,0]), np.array([1,1]), num_sample)*pulse.shape
     samples = samples.astype(int)
 
