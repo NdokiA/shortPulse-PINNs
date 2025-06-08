@@ -1,0 +1,15 @@
+% Daftar Pustaka tanpa halaman kosong berlebih
+\cleardoublepage                                % Mulai di halaman baru, aman untuk 2-sisi
+\phantomsection                                 % 
+
+%Format Daftar Pustaka (Biblio)
+% Format dan ganti judul daftar pustaka
+\makeatletter 
+\renewcommand\@biblabel[1]{} % Hilangkan numbering
+\makeatother
+\parindent 0cm
+\parskip 0.1cm
+\renewcommand{\bibname}{DAFTAR PUSTAKA}  % Ganti judul default dari "Bibliografi" atau "References"
+
+\bibliographystyle{apacite}                    % Gaya sitasi
+\bibliography{references}                      % File .bib

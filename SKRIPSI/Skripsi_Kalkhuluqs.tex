@@ -1,0 +1,66 @@
+\documentclass[a4paper,12pt]{book}
+\usepackage{program}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%KALKHULUQS%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+	\frontmatter
+	\include{Depan/1.Sampul}
+	
+	\pagestyle{plain}
+	\pagenumbering{roman}
+	\setcounter{tocdepth}{2}
+	\include{Depan/2.Judul}
+	\include{Depan/3.Pengesahan}
+	\include{Depan/4.Pernyataan}
+	\include{Depan/5.Abstrak}
+	\include{Depan/6.Abstract}
+	\include{Depan/7.Pengantar}
+	\include{Depan/8.DaftarIsi}
+	\include{Depan/9.DaftarTabel}
+	\include{Depan/10.DaftarGambar}
+	\include{Depan/11.DaftarLampiran}
+	\include{Depan/12.Glosarium}
+
+%Penomoran Halaman
+\fancyhf{}
+\fancyhf[lef,rof]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\pagestyle{fancy}
+\fancypagestyle{plain}
+{\fancyhf{}
+	\renewcommand{\headrulewidth}{0pt}
+	\fancyhf[lef,rof]{\thepage}}
+
+%Format Judul BAB
+\makeatletter
+\renewcommand{\@makechapterhead}[1]{
+	\vspace*{1\p@}%
+	
+	{\parindent \z@ \raggedright \normalfont \ifnum \c@secnumdepth >\m@ne
+		\if@mainmatter
+		\center \MakeUppercase{\vspace{-10pt}\normalsize\bfseries \@chapapp\space \thechapter}
+		%\chapapp\space memunculkan kata "Bab"
+		\par\nobreak
+		\vskip 1\p@ % Mengatur jarak antara "Bab 1" dan "Pendahuluan"
+		\fi
+		\fi
+		\interlinepenalty\@M
+		\normalsize \uppercase{\bfseries #1\par\nobreak} %Bagian ini memunculkan judul bab
+		\vskip 24\p@ % Mengatur jarak antara "Bab 1" dengan "Teks"
+}}
+\makeatother
+	\allowdisplaybreaks
+	\mainmatter
+	\pagenumbering{arabic}
+	\include{Isi/1.Pendahuluan}
+	\include{Isi/2.Teori}
+	\include{Isi/3.Metode}
+	\include{Isi/4.Pembahasan}
+	\include{Isi/5.Penutup}
+	
+	\backmatter
+	\include{Belakang/1.Pustaka}
+	\include{Belakang/2.Lampiran}
+
+\end{document}

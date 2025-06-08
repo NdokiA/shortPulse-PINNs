@@ -1,0 +1,20 @@
+\addtocontents{toc}{\protect\addvspace{5pt}}
+\chapter{PENUTUP}
+
+\section{Kesimpulan}
+
+Berdasarkan hasil penelitian yang dilakukan, dapat disimpulkan bahwa: 
+
+\begin{enumerate}
+
+    \item \emph{Physics-Informed Neural Networks} (PINNs) mampu menyelesaikan persamaan Schr\"{o}dinger Nonlinear (NLS) dalam kasus pulsa \emph{ultrashort}. Metode ini memerlukan normalisasi persamaan untuk menjaga stabilitas numerik. Model menggunakan empat lapisan tersembunyi dengan masing-masing 128 neuron, fungsi aktivasi $\tanh()$, dan strategi optimasi ADAM-LBFGS. Model dites pada variasi jumlah titik kolokasi dan variasi angka \emph{random seed}
+
+    \item Evaluasi Pendekatan Vanilla-PINNs terhadap referensi data \emph{Split-Step Fourier Method} (SSFM) menunjukkan kemampuan prediksi model yang meningkat secara eksponensial dengan jumlah titik kolokasi yang digunakan. 
+
+    \item SAS-PINNs (SMOTE Adaptive Sampling) berhasil meningkatkan akurasi dan konsistensi prediksi dengan mengonfigurasi Nilai Ambang dan Rasio \emph{Oversampling}. Namun, konsentrasi penambahan titik yang terlalu terfokus (niai ambang kecil) berpotensi mengganggu generalisasi model.
+    
+\end{enumerate}
+
+\newpage
+\section{Saran}
+Disarankan untuk mengeksplorasi teknik \emph{SMOTE-Adaptive Sampling} (SAS) dengan beberapa modifikasi pelatihan adaptif seperti pendekatan dekomposisi domain maupun penerapan \emph{causal training}.  Kombinasi ini diharapkan meningkatkan performa PINNs dengan mempertimbangkan urutan temporal data.

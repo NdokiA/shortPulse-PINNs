@@ -1,0 +1,156 @@
+\usepackage[a5paper,hmargin={2.5cm,1.5cm},vmargin={1.5cm,1.5cm}]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[bahasa]{babel}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{times}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage[labelsep=space]{caption}
+\usepackage{amsthm}
+\usepackage{algorithmic}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{placeins}
+\usepackage{fancyhdr}
+\usepackage{titletoc}
+\usepackage[titles]{tocloft}
+\usepackage{ragged2e}
+\usepackage{etoolbox}
+\usepackage[export]{adjustbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{lipsum}
+\usepackage{apacite}
+
+%Format Tabel
+\usepackage[utf8]{inputenc}
+\captionsetup[table]{labelsep=space, 
+         justification=raggedright, singlelinecheck=off, skip=0pt, format=hang}
+\usepackage{threeparttable}
+
+%Format TIKZ
+\usepackage{tikz}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+\usepackage[export]{adjustbox}
+\usepackage{pgfplots}
+\usepackage{tikz-3dplot}
+\pgfplotsset{compat=1.12}
+\usepgfplotslibrary{fillbetween}
+\usetikzlibrary{matrix,shapes,arrows,positioning,chains,calc}
+
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=2cm, minimum height=1cm,text centered, text width=2cm, draw=black, fill=white!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=2.5cm, minimum height=1cm, text centered, text width=2.5cm, draw=black, fill=white!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, text width=8cm, draw=black, fill=white!30]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=white!30]
+\tikzstyle{terminal} = [circle, minimum width=0.5cm, minimum height=0.5cm,text centered, text width=0.5cm, draw=black, fill=white!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\tolerance=100
+\emergencystretch=\maxdimen
+\hyphenpenalty=1000000
+\hbadness=1000000
+
+%Format Daftar Isi
+	\titlecontents{chapter}
+	[6.8em] %5.3
+	{}{\contentslabel[\vspace{0.1cm}\normalsize\bfseries\textsc{\renewcommand{\chaptername}{BAB}\normalsize\bfseries\chaptername}~\thecontentslabel]{6.8em}\hspace{-0.8cm}\textbf}%\thecontentslabel
+	{\hspace{-6.8em}\textbf}% unnumbered chapters
+	{\textbf{\titlerule*[0.7pc]{.} \contentspage}}
+	\setlength{\cftsecindent}{1.8cm}
+	\setlength{\cftsubsecindent}{2.8cm}
+
+%Format Daftar Lampiran
+\newcommand{\listappendixname}{List of Appendices}
+\newlistof{appendix}{app}{\listappendixname}
+\setcounter{appdepth}{2}    
+\renewcommand{\theappendix}{\arabic{appendix}.}
+\renewcommand{\cftappendixpresnum}{Lampiran\space}
+\setlength{\cftbeforeappendixskip}{0cm}
+\setlength{\cftappendixnumwidth}{1in}
+
+%Format Lampiran
+\newcommand{\myappendix}[1]{%
+	\refstepcounter{appendix}%
+	\section*{\normalfont Lampiran \theappendix\space #1}%
+	\addcontentsline{app}{appendix}{\protect\numberline{\theappendix}#1}%
+	\par
+}
+
+%Format Judul Chapter, Section, Subsection	
+	\titleformat{\chapter}[hang]{\centering\normalsize\bfseries\uppercase}{}{1em}{}
+	\titlespacing*{\chapter}{0pt}{-1em}{1\parskip}
+	
+	\titleformat{\section}{\normalfont\fontsize{11}{20}\bfseries}{\thesection}{1em}{}
+	\titlespacing{\section}{0pt}{5pt}{5pt}
+
+	\titleformat{\subsection}{\normalfont\fontsize{11}{20}}{\thesubsection}{1em}{}
+	\titlespacing{\subsection}{0pt}{5pt}{5pt}
+	
+	\titlespacing{\paragraph}{0pt}{5pt}{5pt}
+
+%Format Caption	
+	\titlelabel{\thetitle\quad}
+	\renewcommand{\thechapter}{\Roman{chapter}}
+	\renewcommand{\thesection}{\arabic{chapter}.\arabic{section}}
+	\renewcommand{\theequation}{\arabic{chapter}.\arabic{equation}}  
+	\renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}
+	\renewcommand{\thefigure}{\arabic{chapter}.\arabic{figure}}
+
+%Format Blok Definisi, Teorema
+\theoremstyle{definition}
+\newtheorem{definisi}{Definisi}[chapter]
+\renewcommand{\thedefinisi}{\arabic{chapter}.\arabic{definisi}}
+\newtheorem{lemma}{Lemma}
+\renewcommand{\thelemma}{\arabic{chapter}.\arabic{lemma}}
+\newtheorem{teorema}{Teorema}
+\renewcommand{\theteorema}{\arabic{chapter}.\arabic{teorema}}
+\newtheorem{contoh}{Contoh} 
+\renewcommand{\thecontoh}{\arabic{chapter}.\arabic{contoh}}
+\newtheorem{akibat}{Akibat} 
+\renewcommand{\theakibat}{\arabic{chapter}.\arabic{akibat}}
+\newtheorem{proposisi}{Proposisi} 
+\renewcommand{\theproposisi}{\arabic{chapter}.\arabic{proposisi}}
+\newtheorem{catatan}{Catatan} 
+\renewcommand{\thecatatan}{\arabic{chapter}.\arabic{catatan}}
+
+%Format Paragraf Bukti, Solusi
+\newenvironment{pro}{\paragraph{Bukti:}}{\qed\\}
+\newenvironment{sol}{\paragraph{Solusi:}}{\qed\\}
+
+%Paragraph Indentation
+\setlength{\parindent}{2.5em} 
+%\setlength{\hangindent}{1em} 
+
+%Paragraph Spacing
+\setlength{\parskip}{0.2em}
+
+%Listing
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{kalkhuluqs}{
+	backgroundcolor=\color{white},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=true,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=none,                    
+	numbersep=2pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=true, 
+	tabsize=5
+}
+\lstset{style=kalkhuluqs}

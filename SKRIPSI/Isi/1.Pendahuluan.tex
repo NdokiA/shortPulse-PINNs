@@ -1,0 +1,41 @@
+\addtocontents{toc}{\protect\addvspace{5pt}}
+\chapter{PENDAHULUAN}
+
+\section{Latar Belakang}
+Perkembangan teknologi pemrosesan sinyal mendorong respons sistem komunikasi optik menjadi semakin cepat. Kemajuan ini didorong oleh penelitian karakteristik serat optik yang menjadi komponen utama dalam jaringan komunikasi global. Indeks bias nonlinear serat optik merupakan fokus penting dalam penelitian dinamika perambatan gelombang. Parameter tersebut mempengaruhi interaksi antara dispersi dan modulasi gelombang yang mampu menghasilkan pulsa yang mempertahankan bentuknya selama merambat dalam media nonlinear \shortcite{zhou2022study}. Fenomena ini menjadi sangat relevan dalam perambatan \emph{ultrashort pulse}, jenis pulsa dengan durasi sangat pendek yang sangat sensitif terhadap kedua efek tersebut. 
+
+Persamaan Schr\"{o}dinger Nonlinear (\textit{Nonlinear Schr\"{o}dinger Equation }(NLS)) merupakan persamaan diferensial parsial yang memodelkan dinamika perambatan pulsa serat optik. Metode numerik, seperti \textit{Split-Step Fourier Method} (SSFM), umumnya digunakan untuk memodelkan persamaan di atas. Akan tetapi, metode ini menemui keterbatasan ketika diaplikasikan pada jaringan kompleks \shortcite{wang2022applications}, maupun pada sistem dengan ordo nonlinearitas tinggi \shortcite{jiang2021solving}. 
+
+Pendekatan berbasis data menggunakan jaringan neural menjadi alternatif solusi dalam memodelkan kasus fisis. Algoritma ini mampu mengenali pola berbasis data yang diberikan untuk melakukan inferensi berdasarkan informasi tersebut. Akan tetapi, metode ini memerlukan jumlah data yang besar dan tidak memperhatikan prinsip fisis secara eksplisit \shortcite{wang2022applications}. 
+
+\textit{Physics-Informed Neural Networks} (PINNs) dikembangkan guna menjembatani keterbatasan kedua metode sebelumnya. PINNs mengimplementasikan adaptabilitas jaringan neural dengan \emph{governing equation} dan batasan kasus fisika pada sampel domain sistem \shortcite{raissi2019physics}. Dengan demikian, PINNs memiliki kebutuhan data yang jauh lebih sedikit daripada metode berbasis data konvensional, sembari tetap menghormati prinsip fisika sistem. Metode PINNs ditunjukkan mampu menyelesaikan persamaan diferensial pada domain geometri yang rumit dan mampu mengidentifikasi parameter pada kasus invers, membuatnya sebagai alat yang fleksibel \shortcite{cuomo2022scientific}.
+
+Namun, model PINNs dapat menunjukkan kesulitan ketika berhadapan dengan area dengan perilaku fisis yang kompleks sehingga model sulit mencapai konvergensi \shortciteA{LiuAdapt}. Maka dari itu, varian model PINNs diusulkan dengan menggunakan strategi penambahan sampel domain secara adaptif berbasis \emph{Synthetic Minority Oversampling Technique} (SMOTE), teknik augmentasi data yang digunakan untuk menyeimbangkan ketidakseimbangan/bias distribusi data. Akan tetapi, pada strategi ini, SMOTE digunakan untuk menciptakan bias distribusi secara strategis untuk membantu model pada daerah yang sulit diselesaikan. Metode ini selanjutnya dikenal sebagai \emph{SMOTE-Adaptive-Sampling PINNs} (SAS-PINNs).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Rumusan Masalah}
+Berdasarkan latar belakang diatas, penelitian ini bertujuan untuk menjawab rumusan masalah sebagai berikut:
+\begin{enumerate}
+	\item Bagaimana implementasi \textit{Physics Informed Neural Networks} (PINNs) dalam menyelesaikan Persamaan Schr\"{o}dinger Nonlinear (NLS) pada Konteks Perambatan Pulsa \emph{Ultrashort}?
+    \item Bagaimana akurasi PINNs dibandingkan pendekatan numerik berbasis \emph{Split-Step Fourier Method} (SSFM)?
+    
+	\item Bagaimana strategi \emph{SMOTE-Adaptive-Sampling PINNs} dapat digunakan untuk meningkatkan performa PINNs?
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Batasan Masalah}
+Penelitian ini dibatasi untuk membahas masalah berikut:
+\begin{enumerate}
+	\item Penelitian ini berfokus dalam menyelesaikan persamaan NLS dalam aplikasi pulsa serat optis menggunakan PINNs sebagai framework utama.
+	\item Akurasi dan performa PINN akan dibandingkan dengan metode \textit{Split Step Fourier} (SSFM) sebagai metode yang umum digunakan.
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{Tujuan}
+Berdasarkan rumusan masalah yang telah dipaparkan, tujuan penulisan skripsi ini adalah:
+\begin{enumerate}
+	\item Mengembangkan dan mengaplikasikan algoritma PINN guna menyelesaikan persamaan NLS pada serat optik.
+    \item Mengevaluasi akurasi pendekatan PINN dalam menangkap perambatan pulsa serat optik.
+	\item Mengidentifikasi strategi guna meningkatkan efisiensi dan performa PINNs berdasarkan modifikasi SAS-PINNs.
+\end{enumerate}

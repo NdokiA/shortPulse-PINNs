@@ -1,0 +1,147 @@
+\chapter*{LAMPIRAN}
+\addcontentsline{toc}{chapter}{LAMPIRAN}
+\renewcommand{\thetable}{L\theappendix\arabic{table}}
+\renewcommand{\thefigure}{L\theappendix\arabic{figure}}
+\renewcommand{\theequation}{L\theappendix\arabic{equation}}
+\myappendix{Penurunan Persamaan Non-Linear Schrodinger}
+
+Penurunan persamaan ini diberikan dalam \citeA{agrawal2019nonlinear}.
+
+Empat Persamaan Maxwell diberikan untuk menggambarkan fenomenda dari perambatan pulsa optik serat sebagai berikut: 
+
+\begin{equation}
+    \nabla \times \vec{E} = - \frac{\partial \vec{B}}{\partial t}
+\end{equation}
+
+\begin{equation}
+    \nabla \times \vec{B} = \vec{J}+\frac{\partial \vec{D}}{\partial t}
+\end{equation}
+
+\begin{equation}
+    \nabla \cdot \vec{D} = \rho_f
+\end{equation}
+
+\begin{equation}
+    \nabla \cdot \vec{B} = 0
+\end{equation}
+
+di mana densitas fluks medan listrik \(\vec{D}\) dan medan magnet \(\vec{B}\) dinyatakan dalam: 
+
+\begin{equation}
+    \vec{D} = \varepsilon_0\vec{E} + \vec{P}
+\end{equation}
+
+\begin{equation}
+    \vec{B} = \mu_0 \vec{H} + \vec{M}
+\end{equation}
+
+Polarisasi magnet \(\vec{M}\) pada serat optik dinyatakan sebagai 0. Nilai \(\vec{J}\) dan \(\rho_f\) juga dapat dinyatakan sebagai 0 oleh karena muatan bebas dalam serat optik dapat dianggap tidak ada. Mengambil \emph{curl} dari persamaan L.1.1, dan mengubah nilai \(B\) dan \(D\) dari persamaan L.1.5 DAN L.1.6, didapatkan: 
+
+\begin{equation}
+    \nabla \times \nabla \times \vec{E} = -\frac{1}{c^2}\frac{\partial \vec{E}^2}{\partial t^2} - \mu_0\frac{\partial \vec{P}^2}{\partial t^2}
+\end{equation}
+
+Polarisasi induksi pada serat optik tersusun dari dua bagian yang berupa Polarisasi linear \(\vec{P_L}\) dan polarisasi nonlinear \(\vec{P_{NL}}\)., mengubah persamaan L1.7 sebagai:
+
+\begin{equation}
+    \nabla \times \nabla \times \vec{E} = -\frac{1}{c^2}\frac{\partial \vec{E}^2}{\partial t^2} - \mu_0 \left( \frac{\partial \vec{P_L}^2}{\partial t^2} + \frac{\partial \vec{P_{NL}}^2}{\partial t^2} \right)
+\end{equation}.
+
+Fungsi medan listrik \(\vec{E}, \vec{P_L}, \vec{P_{NL}}\) dapat dinyatakan terhadap amplitudenya yang berubah dengan perlahan terhadap waktu, relatif terhadap periode optik, sebagai: 
+
+\begin{equation}
+    \vec{E}(r,t) = \frac{1}{2}\hat{x}(\mathcal{E}(r,t)\exp(-i\omega_0t)+C)
+\end{equation}
+
+\begin{equation}
+    \vec{P_L}(r,t) = \frac{1}{2}\hat{x}(\mathcal{P}_L(r,t)\exp(-i\omega_0t)+C)
+\end{equation}
+
+\begin{equation}
+    \vec{P_{NL}}(r,t) = \frac{1}{2}\hat{x}(\mathcal{P}_{NL}(r,t)\exp(-i\omega_0t)+C)
+\end{equation}
+
+dengan komponen polarisasi linear dinyatakan atas: 
+
+\begin{align}
+    \mathcal{P}_L(r,t) &= \varepsilon_0 \int_{-\infty}^\infty \chi_{\chi\chi}^1(t-t')\mathcal{E}(r,t')\exp(i\omega_0(t-t') dt' \\
+    &= \frac{\varepsilon_0}{2\pi}\int_{-\infty}^\infty \chi_{\chi\chi}^1(\omega)\tilde{\mathcal{E}}(r,\omega-\omega_0)\exp(i(\omega-\omega_0)) dt'
+\end{align}
+
+di mana \(\tilde{\mathcal{E}}(r,\omega)\) merupakan transformasi Fourier dari \(\mathcal{E}(r,t)\).
+
+semenatara komponen Polarisasi Nonlinear diberikan dengan 
+
+\begin{equation}
+    \mathcal{P}_{NL} \approx \varepsilon_0 \varepsilon_{NL} \mathcal{E}(r,t)
+\end{equation}
+
+Untuk mendapatkan nilai dari \(\mathcal{E}(r,t)\), lebih baik untuk bekerja dalam domain Spektral menggunakan transformasi Fourier atas \(\tilde{\mathcal{E}}(r,\omega-\omega_0)\)nyang diberikan sebagai: 
+
+\begin{equation}
+    \tilde{\mathcal{E}}(r,\omega) = \int_{-\infty}^{\infty} \mathcal{E}(r,t) \exp(i(\omega-\omega_0)t)dt
+\end{equation}
+
+yang mana merupakan solusi dari Persamaan Helmholtz 
+\begin{equation}
+    \nabla^2\tilde{\mathcal{E}} + \varepsilon(\omega)k_0^2\tilde{\mathcal{E}} =0
+\end{equation}
+
+\(k_0\) adalah konstanta dielektrik yang digunakan dalam mendefinisikan refraksi indeks \(\tilde{n}\) dan koefisien absorpsi \(\tilde{\alpha}\).
+
+Separasi variabel dari persamaan L1.15 memberikan: 
+
+\begin{equation}
+    \tilde{\mathcal{E}}(r,\omega-\omega_0) = F(x,y)\tilde{A}(z,\omega-\omega_0) \exp(i\beta_0z)
+\end{equation}
+
+Kemudian, mengembalikan persamaan L1.16 pada Persamaan Helmholtz memberikan \(F(x,y)\) dan \(\tilde{A}(z,\omega)\)
+
+\begin{equation}
+    \frac{\partial^2F}{\partial x^2} + \frac{\partial^2F}{\partial y^2} + (\varepsilon(\omega)k_0^2-\tilde{\beta}^2)F = 0
+\end{equation}
+
+\begin{equation}
+    2i\beta_0 \frac{\partial \tilde{A}}{\partial z}+(\tilde{\beta}^2-\beta_0^2)\tilde{A} =0
+\end{equation}
+
+Persamaan L1.9 menghasilkan: 
+
+\begin{equation}
+    \vec{E}(r,t) = \frac{1}{2}\hat{x}(F(x,y)A(z,t)\exp(i(\beta_0z-\omega_0t))+C)
+\end{equation}
+
+Transformasi Fourier dari \(A(z,t)\) memberikan persamaan L1.19 
+
+\begin{equation}
+    \frac{\partial\tilde{A}}{\partial z} = i(\beta(\omega)+\Delta\beta-\beta_0)\tilde{A}
+\end{equation}
+
+dengan nilai \(\beta_m\) dapat diaproksimasi menggunakan fungsi Taylor terhadap frekuensi carrier pulsa sebagai: 
+
+\begin{equation}
+    \beta_m = (\frac{d^m\beta}{d\omega^m})_{\omega-\omega_0} \quad (m=1,2,...)
+\end{equation}
+
+Ordo ketiga dan seterusnya dari ekspansi Taylor ini umumnya diabaikan ketika \(\Delta \omega << \omega_0\). Menggunakan Transformasi Fourier balik pada domain temporal, nilai \((\omega - \omega_0)\)  digantikan dengan \(i\partial/\partial_t\)Maka dari itu persamaan L1.19 memberikan: 
+
+\begin{equation}
+    \frac{\partial\tilde{A}}{\partial z} = -\beta_1 \frac{\partial A}{\partial t} -  i\beta_2 \frac{\partial^2 A}{\partial t^2} + i \Delta \beta A
+\end{equation}
+
+Nilai \(\Delta \beta\) menyatakan unsur koefisien absorpsi serat \(\alpha\) dan nonlinearitas \(\gamma\).
+
+\begin{equation}
+    \frac{\partial\tilde{A}}{\partial z} +\beta_1 \frac{\partial A}{\partial t} +  i\beta_2 \frac{\partial^2 A}{\partial t^2} + \frac{\alpha}{2}A = i\gamma|A|^2A
+\end{equation}
+
+Orde pertama dari koefisien dispersi \((\beta_1)\) dapat diabaikan ketika ditinjau kerangka waktu yang bergerak (\(t' = t-\beta_1z\)) untuk mengamati perubahan pulsa. Sementara itu, dalam pulsa ultrashort, orde ketiga dari pulsa perlu diperhatikan, memberikan:
+
+\begin{equation}
+    \frac{\partial\tilde{A}}{\partial z}  +  i\beta_2 \frac{\partial^2 A}{\partial t^2} - \beta_3 \frac{\partial^3A}{\partial t^3} + \frac{\alpha}{2}A = i\gamma|A|^2A
+\end{equation}
+
+\newpage 
+\myappendix{Kode Program}
+
+Seluruh kode program dari penelitian ini dapat diakses pada \url{https://github.com/NdokiA/shortPulse-PINNs}
